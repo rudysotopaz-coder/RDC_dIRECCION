@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDC Cierre Mayo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #07102A;
+    --navy2: #1A2464;
+    --gold: #E8A020;
+    --gold-light: #F5C060;
+    --green: #22C55E;
+    --red: #EF4444;
+    --white: #FFFFFF;
+    --gray: #94A3B8;
+    --surface: #0D1B3E;
+    --surface2: #162050;
+    --border: rgba(232,160,32,0.2);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--navy2) 0%, var(--navy) 60%);
+    border-bottom: 3px solid var(--gold);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-bar { width: 6px; height: 52px; background: var(--gold); border-radius: 3px; }
+  .header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; letter-spacing: 1px; text-transform: uppercase; line-height: 1.1; }
+  .header h1 span { color: var(--gold); }
+  .header-meta { text-align: right; font-family: 'Barlow Condensed', sans-serif; }
+  .header-meta .date { font-size: 13px; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; }
+  .header-meta .badge { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 11px; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; margin-top: 4px; }
+  .nav-tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; gap: 4px; padding: 0 40px; overflow-x: auto; }
+  .nav-tabs button { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); background: none; border: none; border-bottom: 3px solid transparent; padding: 14px 18px 11px; cursor: pointer; white-space: nowrap; transition: all .2s; }
+  .nav-tabs button:hover { color: var(--white); }
+  .nav-tabs button.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .main { padding: 32px 40px 60px; max-width: 1400px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .mb-20 { margin-bottom: 20px; }
+  .mb-32 { margin-bottom: 32px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
+  .card.green::before { background: var(--green); }
+  .card.red::before { background: var(--red); }
+  .kpi-big { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; position: relative; overflow: hidden; transition: transform .2s; }
+  .kpi-big:hover { transform: translateY(-2px); }
+  .kpi-big .kpi-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 6px; }
+  .kpi-big .kpi-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 36px; line-height: 1; margin-bottom: 4px; }
+  .kpi-big .kpi-val.pos { color: var(--green); }
+  .kpi-big .kpi-val.neg { color: var(--red); }
+  .kpi-big .kpi-val.neu { color: var(--gold); }
+  .kpi-big .kpi-sub { font-size: 12px; color: var(--gray); }
+  .kpi-big .kpi-sub b { color: var(--white); }
+  .kpi-big .kpi-accent { position: absolute; bottom: 10px; right: 14px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+  .kpi-big .kpi-accent.pos { background: rgba(34,197,94,.15); color: var(--green); }
+  .kpi-big .kpi-accent.neg { background: rgba(239,68,68,.15); color: var(--red); }
+  .kpi-big .kpi-accent.neu { background: rgba(232,160,32,.15); color: var(--gold); }
+  .plant-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .plant-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: 1px; text-transform: uppercase; }
+  .plant-badge { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
+  .plant-badge.ok { background: rgba(34,197,94,.2); color: var(--green); border: 1px solid rgba(34,197,94,.4); }
+  .plant-badge.warn { background: rgba(239,68,68,.2); color: var(--red); border: 1px solid rgba(239,68,68,.4); }
+  .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-row .m-label { font-size: 13px; color: var(--gray); }
+  .metric-row .m-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; }
+  .metric-row .m-val.pos { color: var(--green); }
+  .metric-row .m-val.neg { color: var(--red); }
+  .metric-row .m-val.neu { color: var(--gold); }
+  .bar-chart { margin-top: 12px; }
+  .bar-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 12px; color: var(--gray); width: 80px; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 20px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; color: var(--navy); }
+  .bar-fill.gold { background: var(--gold); }
+  .bar-fill.green { background: var(--green); }
+  .bar-fill.blue { background: #3B82F6; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .data-table .pos { color: var(--green); font-weight: 600; }
+  .data-table .neg { color: var(--red); font-weight: 600; }
+  .data-table .bold { font-weight: 700; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px; }
+  .pill.pos { background: rgba(34,197,94,.15); color: var(--green); }
+  .pill.neg { background: rgba(239,68,68,.15); color: var(--red); }
+  .pill.neu { background: rgba(232,160,32,.15); color: var(--gold); }
+  .insight-box { background: linear-gradient(90deg, rgba(232,160,32,0.08) 0%, transparent 100%); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; font-size: 13px; color: var(--white); line-height: 1.6; }
+  .insight-box strong { color: var(--gold); }
+  .insight-box.green-box { background: linear-gradient(90deg, rgba(34,197,94,0.08) 0%, transparent 100%); border-left-color: var(--green); }
+  .insight-box.green-box strong { color: var(--green); }
+  .gauge-container { text-align: center; padding: 10px 0; }
+  .gauge-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 48px; line-height: 1; }
+  .gauge-val.gold { color: var(--gold); }
+  .gauge-label { font-size: 11px; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+  .gauge-sub { font-size: 12px; color: var(--gray); margin-top: 6px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+  .dot-frijol { background: #CD853F; }
+  .dot-cocina { background: #E67E22; }
+  .dot-veg { background: #22C55E; }
+  @media (max-width: 900px) { .main { padding: 20px 16px 40px; } .header { padding: 16px 20px; } .nav-tabs { padding: 0 16px; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-2 { grid-template-columns: 1fr; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .section.active .card, .section.active .kpi-big { animation: fadeUp .4s ease both; }
+  .section.active .grid-4 > *:nth-child(1) { animation-delay: .05s; }
+  .section.active .grid-4 > *:nth-child(2) { animation-delay: .10s; }
+  .section.active .grid-4 > *:nth-child(3) { animation-delay: .15s; }
+  .section.active .grid-4 > *:nth-child(4) { animation-delay: .20s; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="logo-bar"></div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:2px;">S&A Food Service</div>
+      <h1>RDC Cierre <span>Mayo 2026</span></h1>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="date">Estimado de Cierre · Forecast 3</div>
+    <div class="badge">⭐ Impactos Positivos Destacados</div>
+  </div>
+</div>
+<div class="nav-tabs">
+  <button class="active" onclick="showTab('resumen',this)">📊 Resumen Ejecutivo</button>
+  <button onclick="showTab('carne',this)">🥩 Planta Carne</button>
+  <button onclick="showTab('pamanpi',this)">🥖 Pamanpi</button>
+  <button onclick="showTab('indacasa',this)">🥦 Indacasa</button>
+  <button onclick="showTab('tco',this)">📦 TCO</button>
+</div>
+<div class="main">
+  <div id="resumen" class="section active">
+    <div class="section-title"><span>⭐</span>Resumen Ejecutivo – Impactos Positivos</div>
+    <div class="grid-4 mb-20">
+      <div class="kpi-big"><div class="kpi-label">Indacasa vs Plan ($)</div><div class="kpi-val neg">-0.2%</div><div class="kpi-sub">Prácticamente <b>en plan</b><br>-$0.5K de desvío</div><div class="kpi-accent neu">≈ En Plan</div></div>
+      <div class="kpi-big"><div class="kpi-label">Pamanpi UAI vs Plan</div><div class="kpi-val pos">+$11K</div><div class="kpi-sub">UAI por encima del plan<br>10.3% UAI en MCD</div><div class="kpi-accent pos">↑ Superando</div></div>
+      <div class="kpi-big"><div class="kpi-label">Pamanpi UB Proyectada</div><div class="kpi-val pos">57.4%</div><div class="kpi-sub">Mejor UB del año<br>vs 54.5% Plan</div><div class="kpi-accent pos">↑ Récord Año</div></div>
+      <div class="kpi-big"><div class="kpi-label">TCO Margen UAI</div><div class="kpi-val pos">4.2%</div><div class="kpi-sub">$85.2K UAI positivo<br>722K libras vendidas</div><div class="kpi-accent pos">↑ Rentable</div></div>
+    </div>
+    <div class="grid-4 mb-32">
+      <div class="kpi-big"><div class="kpi-label">Carne MCD Holding vs LY</div><div class="kpi-val pos">+5.3%</div><div class="kpi-sub">+$146K vs año anterior<br>Guatemala +10.3%</div><div class="kpi-accent pos">↑ vs LY</div></div>
+      <div class="kpi-big"><div class="kpi-label">Cocina Indacasa Holding</div><div class="kpi-val pos">+873%</div><div class="kpi-sub">vs año anterior<br>+339% vs Plan</div><div class="kpi-accent pos">🚀 Explosivo</div></div>
+      <div class="kpi-big"><div class="kpi-label">Mezcla Carne Costo</div><div class="kpi-val neu">$2.92</div><div class="kpi-sub">Cierre proyectado<br>Tendencia controlada</div><div class="kpi-accent neu">Estable</div></div>
+      <div class="kpi-big"><div class="kpi-label">El Salvador Carne Holding</div><div class="kpi-val pos">+19%</div><div class="kpi-sub">vs Plan en USD<br>+$61K sobre plan</div><div class="kpi-accent pos">↑ vs Plan</div></div>
+    </div>
+    <div class="section-title" style="font-size:16px;"><span>💡</span>Puntos Clave para la Reunión</div>
+    <div class="grid-2 mb-20">
+      <div>
+        <div class="insight-box green-box"><strong>Pamanpi cierra con UAI +$11K sobre plan.</strong> A pesar de la caída en ventas de -4.6%, la mejora en UB (57.4% proyectada) absorbe el gap. Brownie (+$34K, UB 56%) y galleta forma de pelota (UB 84.5%) son las palancas.</div>
+        <div class="insight-box green-box"><strong>Indacasa virtualmente en plan en ventas (-0.2%).</strong> Cocina Holding creció +872% vs LY. UAI proyectado supera plan en +$12K.</div>
+        <div class="insight-box green-box"><strong>TCO rentable con 4.2% UAI.</strong> 722K libras, margen UB 4.5%, operación lean con solo $6.3K de gasto total.</div>
+      </div>
+      <div>
+        <div class="insight-box"><strong>Planta Carne: Holding MCD supera año anterior.</strong> Guatemala +$224K vs LY (+10%), El Salvador +$78K vs LY (+25%). Gap vs plan explicado por Nicaragua y exportaciones (2 vs 3 contenedores).</div>
+        <div class="insight-box"><strong>Mezcla de carne bajo control.</strong> Costo cierra $2.90–$2.92 en últimos meses, estable pese al Chuck 95/5 a $3.62.</div>
+        <div class="insight-box"><strong>Variaciones de gasto +$47.5K favorables</strong> en Carne y <strong>+$10K en Pamanpi</strong>. Ahorro en plazas vacantes, energía y HE.</div>
+      </div>
+    </div>
+    <div class="section-title" style="font-size:16px;"><span>🏭</span>Estado por Planta</div>
+    <div class="grid-3">
+      <div class="card green">
+        <div class="plant-header"><div class="plant-name" style="color:var(--gold)">Pamanpi</div><div class="plant-badge ok">UAI ↑ Plan</div></div>
+        <div class="metric-row"><span class="m-label">Venta vs Plan</span><span class="m-val neg">-4.6%</span></div>
+        <div class="metric-row"><span class="m-label">UB Proyectada</span><span class="m-val pos">57.4%</span></div>
+        <div class="metric-row"><span class="m-label">UAI vs Plan</span><span class="m-val pos">+$11K ↑</span></div>
+        <div class="metric-row"><span class="m-label">UAI vs LY</span><span class="m-val pos">+$14K ↑</span></div>
+        <div class="metric-row"><span class="m-label">%UAI MCD</span><span class="m-val pos">10.3%</span></div>
+      </div>
+      <div class="card">
+        <div class="plant-header"><div class="plant-name" style="color:var(--gold)">Indacasa</div><div class="plant-badge ok">≈ En Plan</div></div>
+        <div class="metric-row"><span class="m-label">Venta vs Plan</span><span class="m-val neg">-0.2%</span></div>
+        <div class="metric-row"><span class="m-label">UB Proyectada</span><span class="m-val pos">38.3%</span></div>
+        <div class="metric-row"><span class="m-label">UAI vs Plan</span><span class="m-val pos">+$12K ↑</span></div>
+        <div class="metric-row"><span class="m-label">UAI vs LY</span><span class="m-val pos">+$13K ↑</span></div>
+        <div class="metric-row"><span class="m-label">%UAI Terceros</span><span class="m-val pos">27.2%</span></div>
+      </div>
+      <div class="card red">
+        <div class="plant-header"><div class="plant-name" style="color:var(--gold)">Planta Carne</div><div class="plant-badge warn">Venta ↓ Plan</div></div>
+        <div class="metric-row"><span class="m-label">Venta vs Plan</span><span class="m-val neg">-11.2%</span></div>
+        <div class="metric-row"><span class="m-label">Holding vs LY</span><span class="m-val pos">+5.3% ↑</span></div>
+        <div class="metric-row"><span class="m-label">UAI vs Plan</span><span class="m-val neg">-$41K</span></div>
+        <div class="metric-row"><span class="m-label">Mezcla Carne</span><span class="m-val neu">$2.92/lb</span></div>
+        <div class="metric-row"><span class="m-label">%UAI MCD</span><span class="m-val pos">6.2%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="carne" class="section">
+    <div class="section-title"><span>🥩</span>Planta de Carne – Mayo 2026</div>
+    <div class="grid-4 mb-20">
+      <div class="kpi-big"><div class="kpi-label">Venta Total vs Plan</div><div class="kpi-val neg">-11.2%</div><div class="kpi-sub">-$466K vs plan<br>Acum. -1.13% vs plan</div><div class="kpi-accent neg">↓ Plan</div></div>
+      <div class="kpi-big"><div class="kpi-label">Holding MCD vs LY</div><div class="kpi-val pos">+5.3%</div><div class="kpi-sub">+$146K sobre año anterior<br>Precio por libra sube</div><div class="kpi-accent pos">Precio ↑</div></div>
+      <div class="kpi-big"><div class="kpi-label">Precio/Lb vs LY</div><div class="kpi-val pos">+12.6%</div><div class="kpi-sub">$3.58 FCST vs $3.12 LY<br>Mejora de precio realizada</div><div class="kpi-accent pos">↑ Precio</div></div>
+      <div class="kpi-big"><div class="kpi-label">Mezcla Cierre MP</div><div class="kpi-val neu">$2.92</div><div class="kpi-sub">Proyección cierre MCD<br>Costo controlado</div><div class="kpi-accent neu">Estable</div></div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">MCD Holding – Desempeño por País</div>
+        <table class="data-table">
+          <thead><tr><th>País</th><th>∆ vs LY ($)</th><th>∆ vs Plan ($)</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td class="bold">Guatemala</td><td class="pos">+$224K (+10.3%)</td><td class="pos">+$89K (+3.9%)</td><td><span class="pill pos">$ ↑ Plan</span></td></tr>
+            <tr><td class="bold">El Salvador</td><td class="pos">+$78K (+25.5%)</td><td class="pos">+$61K (+18.8%)</td><td><span class="pill pos">↑ Todo</span></td></tr>
+            <tr><td class="bold">Honduras</td><td class="neg">-$35K (-27.3%)</td><td class="neg">-$43K (-31.2%)</td><td><span class="pill neg">↓ Ambos</span></td></tr>
+            <tr><td class="bold">Nicaragua</td><td class="neg">-$120K (-68.7%)</td><td class="neg">-$130K (-70.3%)</td><td><span class="pill neg">↓ Crítico</span></td></tr>
+            <tr style="background:rgba(255,255,255,0.04)"><td class="bold">Total</td><td class="pos">+$146K (+5.3%)</td><td class="neg">-$23K (-0.8%)</td><td><span class="pill neu">$ ≈ Plan</span></td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;"><div class="insight-box green-box"><strong>En USD, Holding casi en plan (-0.8%).</strong> Guatemala y El Salvador compensan Nicaragua. Volumen baja pero precio/lb sube +12.6% vs LY.</div></div>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Evolución Mezcla de Carne ($/lb)</div>
+        <div class="bar-chart">
+          <div class="bar-item"><div class="bar-label">Enero</div><div class="bar-track"><div class="bar-fill blue" style="width:75%">$2.52</div></div></div>
+          <div class="bar-item"><div class="bar-label">Febrero</div><div class="bar-track"><div class="bar-fill blue" style="width:78%">$2.62</div></div></div>
+          <div class="bar-item"><div class="bar-label">Marzo</div><div class="bar-track"><div class="bar-fill blue" style="width:85%">$2.85</div></div></div>
+          <div class="bar-item"><div class="bar-label">Abril</div><div class="bar-track"><div class="bar-fill blue" style="width:87%">$2.91</div></div></div>
+          <div class="bar-item"><div class="bar-label">Mayo</div><div class="bar-track"><div class="bar-fill gold" style="width:87%">$2.90 ← Estable</div></div></div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="metric-row"><span class="m-label">Chuck 90/10 (28.4% mix)</span><span class="m-val neu">$3.18/lb</span></div>
+          <div class="metric-row"><span class="m-label">Chuck 95/5 (21.8% mix)</span><span class="m-val neg">$3.61/lb</span></div>
+          <div class="metric-row"><span class="m-label">Grasa 50/50 EXP (7.3% mix)</span><span class="m-val pos">$2.02/lb</span></div>
+          <div class="metric-row"><span class="m-label">Proyección Cierre</span><span class="m-val neu" style="font-size:20px;">$2.92/lb</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-20">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Causa de Cambio UAI – Variaciones de Gasto (+$47.5K Favorable)</div>
+      <div class="grid-3">
+        <div>
+          <div class="insight-box green-box"><strong>+$6K</strong> Plazas vacantes (Logística, Calidad, I&D)</div>
+          <div class="insight-box green-box"><strong>+$5.5K</strong> Energía eléctrica menor a proyección</div>
+          <div class="insight-box green-box"><strong>+$18K</strong> Fianza Decreto 29-89 (no proyectada)</div>
+        </div>
+        <div>
+          <div class="insight-box green-box"><strong>+$8.5K</strong> Funcional SAP–PP (inicia 25/Mayo)</div>
+          <div class="insight-box green-box"><strong>+$26.5K</strong> Proyección de intereses</div>
+          <div class="insight-box green-box"><strong>+$5K</strong> Otros (viáticos, uniformes, agua)</div>
+        </div>
+        <div>
+          <div class="insight-box"><strong>-$32K</strong> Proyección almacenaje</div>
+          <div class="insight-box"><strong>-$5K</strong> Proyección HE y administración</div>
+          <div style="margin-top:16px;"><div class="gauge-container"><div class="gauge-val gold">+$47.5K</div><div class="gauge-label">Total Variaciones Favorables</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pamanpi" class="section">
+    <div class="section-title"><span>🥖</span>Pamanpi – Mayo 2026</div>
+    <div class="grid-4 mb-20">
+      <div class="kpi-big"><div class="kpi-label">UB Proyectada</div><div class="kpi-val pos">57.4%</div><div class="kpi-sub">Mejor del año · Plan 54.5%<br>+2.9pp sobre plan</div><div class="kpi-accent pos">↑ Récord 2026</div></div>
+      <div class="kpi-big"><div class="kpi-label">UAI vs Plan</div><div class="kpi-val pos">+$11K</div><div class="kpi-sub">A pesar de venta -4.6%<br>Eficiencia operativa</div><div class="kpi-accent pos">↑ Sobre Plan</div></div>
+      <div class="kpi-big"><div class="kpi-label">Koenig Holding vs LY</div><div class="kpi-val pos">+25%</div><div class="kpi-sub">+$78K vs año anterior<br>Pan artesano 19→21%</div><div class="kpi-accent pos">↑ Creciendo</div></div>
+      <div class="kpi-big"><div class="kpi-label">Tortilla Holding vs LY</div><div class="kpi-val pos">+177%</div><div class="kpi-sub">vs año anterior en $<br>+173% en volumen</div><div class="kpi-accent pos">🚀 Explosivo</div></div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div class="card green">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">UB por Línea – Mayo (Período 5)</div>
+        <div class="bar-chart">
+          <div class="bar-item"><div class="bar-label">Koenig</div><div class="bar-track"><div class="bar-fill green" style="width:68%">68.1%</div></div></div>
+          <div class="bar-item"><div class="bar-label">Eventos</div><div class="bar-track"><div class="bar-fill gold" style="width:64%">64.1%</div></div></div>
+          <div class="bar-item"><div class="bar-label">Pan Manual</div><div class="bar-track"><div class="bar-fill green" style="width:63%">62.8%</div></div></div>
+          <div class="bar-item"><div class="bar-label">Fritsch</div><div class="bar-track"><div class="bar-fill green" style="width:61%">60.7%</div></div></div>
+          <div class="bar-item"><div class="bar-label">Repostería</div><div class="bar-track"><div class="bar-fill blue" style="width:51%">50.9%</div></div></div>
+          <div class="bar-item"><div class="bar-label">Tortilla</div><div class="bar-track"><div class="bar-fill blue" style="width:51%">50.9%</div></div></div>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.08);border-radius:8px;text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green)">57.4%</div><div style="font-size:11px;color:var(--gray);">UB TOTAL PROYECTADA</div></div>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Palancas de Mejora UB</div>
+        <div class="insight-box green-box"><strong>Tortilla:</strong> Ajuste de peso → UB 50.9%</div>
+        <div class="insight-box green-box"><strong>Koenig:</strong> Pan artesano 19%→21%. Hamburguesa +7pp UB. Hot dog +5pp por cambio de bolsa.</div>
+        <div class="insight-box green-box"><strong>Repostería:</strong> Brownie +$34K con 56% UB. Pastel zanahoria +4% UB.</div>
+        <div class="insight-box green-box"><strong>Fritsch:</strong> Ciabattas +5% UB por mejora rendimiento.</div>
+        <div class="insight-box green-box"><strong>Pan Manual:</strong> Galleta forma de pelota con <b>UB 84.5%</b> — el producto más rentable del portafolio.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="indacasa" class="section">
+    <div class="section-title"><span>🥦</span>Indacasa – Mayo 2026</div>
+    <div class="grid-4 mb-20">
+      <div class="kpi-big"><div class="kpi-label">Venta vs Plan</div><div class="kpi-val neg">-0.2%</div><div class="kpi-sub">Solo -$0.5K de desvío<br>Prácticamente en plan</div><div class="kpi-accent neu">≈ En Plan</div></div>
+      <div class="kpi-big"><div class="kpi-label">UAI vs Plan</div><div class="kpi-val pos">+$12K</div><div class="kpi-sub">+$12K sobre plan<br>+$13K vs año anterior</div><div class="kpi-accent pos">↑ Superando</div></div>
+      <div class="kpi-big"><div class="kpi-label">Cocina Holding vs LY</div><div class="kpi-val pos">+873%</div><div class="kpi-sub">vs año anterior<br>+339% vs plan</div><div class="kpi-accent pos">🚀 Explosivo</div></div>
+      <div class="kpi-big"><div class="kpi-label">%UAI Terceros</div><div class="kpi-val pos">27.2%</div><div class="kpi-sub">El segmento más rentable<br>Cocina + Vegetales</div><div class="kpi-accent pos">↑ Alto Margen</div></div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div class="card green">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Holding – Variaciones vs Plan ($)</div>
+        <table class="data-table">
+          <thead><tr><th>Línea</th><th>∆ vs LY</th><th>∆ vs Plan</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dot dot-cocina"></span>Cocina</td><td class="pos">+872.7%</td><td class="pos">+339.4%</td><td><span class="pill pos">🚀</span></td></tr>
+            <tr><td><span class="dot dot-veg"></span>Vegetales</td><td class="pos">+24.3%</td><td class="pos">+8.2%</td><td><span class="pill pos">↑</span></td></tr>
+            <tr><td>Tomate</td><td class="pos">+10.7%</td><td class="pos">+4.4%</td><td><span class="pill pos">↑</span></td></tr>
+            <tr><td>Té</td><td class="pos">+5.1%</td><td class="neg">-0.9%</td><td><span class="pill neu">≈</span></td></tr>
+            <tr><td><span class="dot dot-frijol"></span>Frijol</td><td class="neg">-23.6%</td><td class="neg">-27.9%</td><td><span class="pill neg">↓</span></td></tr>
+            <tr style="background:rgba(255,255,255,0.04)"><td class="bold">Total Holding</td><td class="pos">+17.5%</td><td class="pos">+6.4%</td><td><span class="pill pos">↑ Plan</span></td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;"><div class="insight-box green-box"><strong>Holding +6.4% sobre plan en $.</strong> Cocina y Vegetales compensan Frijol. Kit Pizza Día de la Madre: $3.2K con 60.4% UB.</div></div>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Rentabilidad por Segmento</div>
+        <div class="grid-3" style="gap:12px;">
+          <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.03);border-radius:8px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">MCD</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--gold)">7.7%</div><div style="font-size:11px;color:var(--gray);">%UAI</div></div>
+          <div style="text-align:center;padding:16px;background:rgba(34,197,94,0.08);border-radius:8px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">FS</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green)">9.7%</div><div style="font-size:11px;color:var(--gray);">%UAI</div></div>
+          <div style="text-align:center;padding:16px;background:rgba(34,197,94,0.12);border-radius:8px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Terceros</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green)">27.2%</div><div style="font-size:11px;color:var(--gray);">%UAI</div></div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="metric-row"><span class="m-label">UB Proyectada Total</span><span class="m-val pos" style="font-size:22px;">38.3%</span></div>
+          <div class="metric-row"><span class="m-label">Rendimiento Lechuga</span><span class="m-val pos">67.9% ↑</span></div>
+          <div class="metric-row"><span class="m-label">Búsqueda nuevos clientes</span><span class="m-val neu">Taco Bell / Subway</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tco" class="section">
+    <div class="section-title"><span>📦</span>TCO – P&L Mayo 2026</div>
+    <div class="grid-4 mb-20">
+      <div class="kpi-big"><div class="kpi-label">Ventas</div><div class="kpi-val neu">$2,035.9K</div><div class="kpi-sub">722K libras vendidas<br>Carne Res 50/50 principal</div><div class="kpi-accent neu">722K lbs</div></div>
+      <div class="kpi-big"><div class="kpi-label">UAI</div><div class="kpi-val pos">$85.2K</div><div class="kpi-sub">4.2% sobre ventas<br>Rentabilidad positiva</div><div class="kpi-accent pos">4.2% Margen</div></div>
+      <div class="kpi-big"><div class="kpi-label">Utilidad Bruta</div><div class="kpi-val pos">$91.6K</div><div class="kpi-sub">4.5% UB sobre ventas<br>Gasto controlable mínimo</div><div class="kpi-accent pos">4.5% UB</div></div>
+      <div class="kpi-big"><div class="kpi-label">Gasto Total</div><div class="kpi-val pos">$6.3K</div><div class="kpi-sub">Solo 0.3% de ventas<br>Operación lean</div><div class="kpi-accent pos">Muy Bajo</div></div>
+    </div>
+    <div class="grid-2 mb-20">
+      <div class="card green">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">P&L Completo</div>
+        <div class="metric-row"><span class="m-label">Ventas</span><span class="m-val neu">$2,035.9K</span></div>
+        <div class="metric-row"><span class="m-label">Costo MP</span><span class="m-val neg">$1,944.4K (43.1%)</span></div>
+        <div class="metric-row"><span class="m-label">Utilidad Bruta</span><span class="m-val pos">$91.6K (4.5%)</span></div>
+        <div class="metric-row"><span class="m-label">Gasto Controlable</span><span class="m-val pos">$3.2K (0.1%)</span></div>
+        <div class="metric-row"><span class="m-label">Gasto No Controlable</span><span class="m-val">$3.1K (0.1%)</span></div>
+        <div style="margin-top:12px;padding:14px;background:rgba(34,197,94,0.08);border-radius:8px;display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;">UAI</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green);">$85.2K · 4.2%</span></div>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Mix de Volumen Vendido</div>
+        <div class="bar-chart">
+          <div class="bar-item"><div class="bar-label">50/50</div><div class="bar-track"><div class="bar-fill gold" style="width:66%">480K lbs · 66%</div></div></div>
+          <div class="bar-item"><div class="bar-label">95/5</div><div class="bar-track"><div class="bar-fill blue" style="width:27%">194K lbs · 27%</div></div></div>
+          <div class="bar-item"><div class="bar-label">85/15</div><div class="bar-track"><div class="bar-fill green" style="width:7%">47K lbs</div></div></div>
+        </div>
+        <div style="margin-top:20px;">
+          <div class="insight-box green-box"><strong>TCO opera con eficiencia máxima:</strong> Solo $6.3K de gasto total sobre $2M en ventas. Operación lean y rentable.</div>
+          <div class="insight-box green-box"><strong>Venta actualizada al 31/Mayo.</strong> Cifras finales confirmadas.</div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Total Plantas – UAI vs LY</div>
+          <div class="metric-row"><span class="m-label">UAI vs Plan</span><span class="m-val neg">-$18K</span></div>
+          <div class="metric-row"><span class="m-label">UAI vs LW</span><span class="m-val pos">+$13K ↑</span></div>
+          <div class="metric-row"><span class="m-label">UAI vs LY</span><span class="m-val pos">+$8K ↑</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
